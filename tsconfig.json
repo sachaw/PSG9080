@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "ES6",
+    "moduleResolution": "Node",
+    "target": "ES2018",
+    "sourceMap": true,
+    "declaration": true,
+    "outDir": "./dist",
+    // "strict": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    // "strictBindCallApply": true,
+    // "strictFunctionTypes": true,
+    // "strictNullChecks": true,
+    // "strictPropertyInitialization": true,
+    // "noImplicitReturns": true,
+    "experimentalDecorators": true
+  },
+  "include": ["src/**/*"],
+  "typedocOptions": {
+    "out": "docs"
+  }
+}
