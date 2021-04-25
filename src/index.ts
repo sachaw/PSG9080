@@ -1,6 +1,5 @@
 import { Subject } from "rxjs";
 
-import { LineBreakTransformer } from "./tmp";
 import {
   channel,
   frequencyCategory,
@@ -14,6 +13,7 @@ import {
   waveformLoadMethod,
   waveType
 } from "./types";
+import { LineBreakTransformer } from "./utils/LineBreakTransformer";
 
 export * from "./types";
 
@@ -35,8 +35,8 @@ export class PSG9080 {
   private channel2: channel;
 
   private reader: ReadableStreamDefaultReader<Uint8Array>;
-  private inputDone: Promise<void>;
-  private outputDone: Promise<void>;
+  // private inputDone: Promise<void>;
+  // private outputDone: Promise<void>;
   private inputStream: ReadableStream<any>;
   private outputStream: WritableStream<string>;
 
@@ -171,16 +171,16 @@ export class PSG9080 {
   public async disconnect() {
     if (this.reader) {
       await this.reader.cancel();
-      await this.inputDone.catch(() => {});
+      // await this.inputDone.catch(() => {});
       this.reader = null;
-      this.inputDone = null;
+      // this.inputDone = null;
     }
 
     if (this.outputStream) {
       await this.outputStream.getWriter().close();
-      await this.outputDone;
+      // await this.outputDone;
       this.outputStream = null;
-      this.outputDone = null;
+      // this.outputDone = null;
     }
 
     await this.port.close();
@@ -196,11 +196,11 @@ export class PSG9080 {
     });
 
     const encoder = new TextEncoderStream();
-    this.outputDone = encoder.readable.pipeTo(this.port.writable);
+    // this.outputDone = encoder.readable.pipeTo(this.port.writable);
     this.outputStream = encoder.writable;
 
     let decoder = new TextDecoderStream();
-    this.inputDone = this.port.readable.pipeTo(decoder.writable);
+    // this.inputDone = this.port.readable.pipeTo(decoder.writable);
     this.inputStream = decoder.readable.pipeThrough(
       new TransformStream(new LineBreakTransformer())
     );
@@ -214,7 +214,7 @@ export class PSG9080 {
 
   getDataLoop() {
     setInterval(() => {
-      console.log("sending");
+      console.log("!!sending!!");
 
       this.writeToStream(":r00=80.\n");
     }, 500);
